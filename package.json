@@ -5,8 +5,6 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec babel-node src/index.js",
-    "prisma-deploy": "prisma deploy --env-file env/.env.development",
-    "prisma-generate": "prisma generate --env-file env/.env.development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -23,10 +21,7 @@
     "graphql-import": "^0.7.1",
     "jsonwebtoken": "^8.4.0",
     "morgan": "^1.9.1",
-    "nodemailer": "^5.0.0",
-    "prisma": "^1.23.2",
-    "prisma-binding": "^2.2.12",
-    "prisma-client-lib": "^1.24.0"
+    "nodemailer": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
