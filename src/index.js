@@ -1,18 +1,25 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
-const express = require('express');
-const { ApolloServer, gql } = require('apollo-server-express');
-import { importSchema } from 'graphql-import';
-const cors = require('cors');
-const morgan = require('morgan');
+import express from 'express';
+import { ApolloServer, gql } from 'apollo-server-express';
+import cors from 'cors';
+import morgan from 'morgan';
 
-const { prisma } = require('./generated/prisma-client')
+import { importSchema } from 'graphql-import';
+
+import userSchema from './modules/user/user.schema';
 
 const app = express();
 
 app.use(cors());
 app.use(morgan('dev'));
+
+import { schema } from './modules';
+//import schema from './modules/schema';
+//console.log('SCHEMA ', schema);
+//import resolvers from './modules/resolvers';
+import models from './modules/models';
 
 // const schema = gql`
 //   type Query {
@@ -31,34 +38,46 @@ const resolvers = {
     //   };
     // },
     users: (parent, args, context, info) => {
-      return context.prisma.users();
+      //return context.prisma.users();
+      return {data: 'hi'};
     },
   },
   Mutation: {
     createUser: async (parent, args, context, info) => {
-      const { name, email } = args.data;
-      console.log('createUser', name, email);
-      const user = await context.prisma.createUser({
-        name: args.data.name,
-        email: args.data.email,
-        role: 'admin'
-      });
+      // const { name, email } = args.data;
+      // console.log('createUser', name, email);
+      // const user = await context.prisma.createUser({
+      //   name: args.data.name,
+      //   email: args.data.email,
+      //   role: 'admin'
+      // });
 
-      return user;
+      // return user;
+      return {data: 'hi'};
 
     }
   },
 };
 
-const schema = importSchema(__dirname + '/generated/prisma.graphql');
-const typeDefs = gql`${schema}`;
+// const schema = importSchema(__dirname + '/generated/prisma.graphql');
+// const typeDefs = gql`${schema}`;
+
+//const importedSchema = importSchema(__dirname + '/schema.graphql');
+const importedSchema = importSchema(__dirname + '/modules/user/userSchema.graphql');
+//console.log('importedSchema', importedSchema);
+
+const typeDefs = gql`${importedSchema}`;
+
+console.log('userSchma', userSchema );
+
 
 const server = new ApolloServer({
-  typeDefs: typeDefs,
+  typeDefs: schema,
+  //typeDefs: userSchema,
   //typeDefs: schema, 
   resolvers,
   context: {
-    prisma
+    models
   }
   // context: request => {
   //   console.log('request', request.body);
