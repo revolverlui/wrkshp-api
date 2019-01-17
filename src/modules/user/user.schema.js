@@ -4,11 +4,13 @@ const userSchema = gql`
    extend type Query {
       users: [User!]
       user(id: ID!): User
-      # me: User
+      me: User
    }
 
    extend type Mutation {
-      createUser(email: String): User!
+      createUser(email: String!, password: String!): Token!
+      login(email: String!, password: String!): Token!
+      deleteUser(id: String!): User
    }
 
    type Token {
@@ -18,6 +20,7 @@ const userSchema = gql`
    type User {
       id: ID!
       email: String!
+      password: String!
       #role: String
    }
 `;
