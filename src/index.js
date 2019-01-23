@@ -9,6 +9,23 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 
 import { getMe } from './modules/auth';
+import Ac from './modules/auth/accesscontrol';
+
+let options = [{
+  role: 'ADMIN',
+  can: ['user:create', 'user:read', 'user:update', 'user:delete'],
+  inherits: 'CUSTOMER'
+}, {
+  role: 'CUSTOMER',
+  can: ['project:create', 'project:read', 'project:update', 'project:delete'],
+  inherits: 'USER'
+
+}, {
+  role: 'USER',
+  can: ['user:create', 'user:read', 'user:update', 'user:delete'],
+}];
+
+const AC = new Ac(options);
 
 const app = express();
 

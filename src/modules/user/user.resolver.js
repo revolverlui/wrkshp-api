@@ -2,8 +2,8 @@ import { createToken } from '../auth';
 
 export default {
    Query: {
-      users: async (parent, args, { models }) => {
-         console.log('users QUERY', args);
+      users: async (parent, args, { models }, info) => {
+         console.log('users QUERY', info);
          //return 'hi';
          return await models.User.find({});
       },
@@ -23,7 +23,7 @@ export default {
             role: 'admin'
          });
 
-         const token = await createToken(user, secret, '30m');
+         const token = await createToken(user, secret, '7d');
          console.log('createToken from MUTATION', token);
          return {token: token};
          //return { token: createToken(user, secret, '30m') };
