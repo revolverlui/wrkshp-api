@@ -10,7 +10,7 @@ export default {
       },
    },
    Mutation: {
-      createProject: async (parent, { title }, { models, me }) => {
+      projectCreate: async (parent, { title }, { models, me }) => {
          console.log('createProject', title, me, typeof me.id);
          const project = await models.Project.create({
             userId: me.id,
@@ -19,7 +19,7 @@ export default {
 
          return project;
       },
-      updateProject: async (parent, { id , ...rest }, { models, me }) => {
+      projectUpdate: async (parent, { id , ...rest }, { models, me }) => {
          console.log('updateProject', id, rest, rest.id);
          const project = await models.Project.findOneAndUpdate({ _id: id}, {
             ...rest
@@ -27,7 +27,7 @@ export default {
 
          return project;
       },
-      deleteProject: async (parent, { id }, { models, me }) => {
+      projectDelete: async (parent, { id }, { models, me }) => {
          return await models.Project.findByIdAndDelete(id);
       },
    }

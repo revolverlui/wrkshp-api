@@ -5,9 +5,9 @@ const createToken = async (user, secret, expiresIn) => {
    // return await jwt.sign({ id, email, role }, secret, {
    //    expiresIn,
    // });
-   console.log('createToken', user);
-   const { id, email } = user;
-   return await jwt.sign({ id, email }, secret, {
+   console.log('createToken', user, user.password);
+   const { id, email, role } = user;
+   return await jwt.sign({ id, email, role }, secret, {
       expiresIn,
    });
 };

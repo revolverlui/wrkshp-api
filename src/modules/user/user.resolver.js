@@ -3,7 +3,7 @@ import { createToken } from '../auth';
 export default {
    Query: {
       users: async (parent, args, { models }, info) => {
-         console.log('users QUERY', info);
+         console.log('users QUERY', info.fieldNodes);
          //return 'hi';
          return await models.User.find({});
       },
@@ -15,12 +15,12 @@ export default {
       },
    },
    Mutation: {
-      createUser: async (parent, { email, password }, { models, secret }) => {
-         console.log('createUser', email, password);
+      userRegister: async (parent, { email, password }, { models, secret }) => {
+         console.log('userRegister', email, password);
          const user = await models.User.create({
             password: password,
             email: email,
-            role: 'admin'
+            role: 'USER'
          });
 
          const token = await createToken(user, secret, '7d');
@@ -28,10 +28,10 @@ export default {
          return {token: token};
          //return { token: createToken(user, secret, '30m') };
       },
-      deleteUser: async (parent, { id }, { models }) => {
+      userDelete: async (parent, { id }, { models }) => {
          return await models.User.findByIdAndDelete(id);
       },
-      login: async (
+      userLogin: async (
          parent,
          { email, password },
          { models, secret },

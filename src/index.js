@@ -1,31 +1,19 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+
 import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
+import { makeExecutableSchema } from 'graphql-tools';
+import { applyMiddleware } from 'graphql-middleware';
+
 import cors from 'cors';
 import morgan from 'morgan';
 
 import mongoose from 'mongoose';
 
 import { getMe } from './modules/auth';
-import Ac from './modules/auth/accesscontrol';
-
-let options = [{
-  role: 'ADMIN',
-  can: ['user:create', 'user:read', 'user:update', 'user:delete'],
-  inherits: 'CUSTOMER'
-}, {
-  role: 'CUSTOMER',
-  can: ['project:create', 'project:read', 'project:update', 'project:delete'],
-  inherits: 'USER'
-
-}, {
-  role: 'USER',
-  can: ['user:create', 'user:read', 'user:update', 'user:delete'],
-}];
-
-const AC = new Ac(options);
+import permissions from './modules/auth/permissions';
 
 const app = express();
 
@@ -60,10 +48,21 @@ mongoose.connection.on('connected', () => {
 //   return db;
 // }
 
-
-const server = new ApolloServer({
+const executableSchema = makeExecutableSchema({
   typeDefs: schema,
   resolvers,
+});
+
+const schemaWithMiddleware = applyMiddleware(
+  executableSchema,
+  permissions,
+);
+
+
+
+
+const server = new ApolloServer({
+  schema: schemaWithMiddleware,
   context: async ({req}) => {
     const secret = process.env.AUTH_TOKEN_SECRET;
     const me = await getMe(req, secret);

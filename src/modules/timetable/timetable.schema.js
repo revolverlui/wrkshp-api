@@ -7,9 +7,9 @@ const timetableSchema = gql`
    }
 
    extend type Mutation {
-      createTimetable(projectId: ID!, title: String): Timetable!
-      updateTimetable(id: ID!, title: String): Timetable!
-      deleteTimetable(id: ID!): Timetable!
+      timetableCreate(projectId: ID!, title: String): Timetable!
+      timetableUpdate(id: ID!, title: String): Timetable!
+      timetableDelete(id: ID!): Timetable!
    }
 
    type Timetable {

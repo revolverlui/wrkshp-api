@@ -1,5 +1,4 @@
 import { ForbiddenError, AuthenticationError } from 'apollo-server';
-import { combineResolvers, skip } from 'graphql-resolvers';
 
 const createToken = async (user, secret, expiresIn) => {
    const { id, email } = user;
@@ -23,12 +22,8 @@ const getMe = async (req, secret) => {
    }
 };
 
-const isAuthenticated = (parent, args, { me }) => {
-   me ? skip : new ForbiddenError('Not authenticated as user.');
-}
 
 export {
    createToken,
-   getMe,
-   isAuthenticated
+   getMe
 }

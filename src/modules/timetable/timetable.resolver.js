@@ -1,6 +1,7 @@
 export default {
    Query: {
-      timetables: async (parent, args, { models }) => {
+      timetables: async (parent, args, { models }, info) => {
+         console.log('users QUERY', info.fieldNodes);
          return await models.Timetable.find({});
       },
       timetable: async (parent, { id }, { models }) => {
@@ -8,7 +9,8 @@ export default {
       },
    },
    Mutation: {
-      createTimetable: async (parent, { projectId, ...rest }, { models, me }) => {
+      timetableCreate: async (parent, { projectId, ...rest }, { models, me }, info ) => {
+         console.log('createTimetable QUERY', info.fieldNodes);
          console.log('createTimetable', projectId, rest);
          const timetable = await models.Timetable.create({
             projectId: projectId,
@@ -18,7 +20,7 @@ export default {
 
          return timetable;
       },
-      updateTimetable: async (parent, { id, ...rest }, { models, me }) => {
+      timetableUpdate: async (parent, { id, ...rest }, { models, me }) => {
          try {
             const timetable = await models.Timetable.findOneAndUpdate({ _id: id}, {
                ...rest
@@ -29,7 +31,7 @@ export default {
             console.log('updateTimetable ERROR', err);
          }
       },
-      deleteTimetable: async (parent, { id }, { models, me }) => {
+      timetableDelete: async (parent, { id }, { models, me }) => {
          return await models.Timetable.findByIdAndDelete(id);
       },
    }

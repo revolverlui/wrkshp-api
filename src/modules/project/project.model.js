@@ -29,6 +29,11 @@ let projectSchema = new mongoose.Schema({
       type: Boolean,
       default: false
    },
+   collaborators: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      get: v => v.toString()
+   }],
    title: {
       type: String,
       required: true
