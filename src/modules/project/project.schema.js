@@ -4,6 +4,7 @@ const projectSchema = gql`
    extend type Query {
       projects: [Project!]
       project(id: ID!): Project
+      meProjects: [Project!]
    }
 
    extend type Mutation {
@@ -20,6 +21,7 @@ const projectSchema = gql`
       public: Boolean
       collaborative: Boolean
       title: String!
+      timetables: [Timetable!]
    }
 `;
 

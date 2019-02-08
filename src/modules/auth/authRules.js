@@ -7,6 +7,7 @@ const isAuthenticated = rule()(async (parent, args, { me }, info) => {
 
 // unclear if that works OR if it needs to work like the collaboratot rule, incl. a model
 const isOwner = rule()(async (parent, args, { me }, info) => {
+   console.log('PERMISSION: isOwner >', me.id, args.userId, parent);
    return me.id === args.userId;
 });
 
@@ -23,7 +24,7 @@ const isCollaborator = (model) => rule()(async (parent, args, { models }, info) 
 
 
 export {
-   isAuthenticated, 
+   isAuthenticated,
    isAdmin,
    isOwner,
    isCollaborator

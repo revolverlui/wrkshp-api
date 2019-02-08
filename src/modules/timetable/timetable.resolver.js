@@ -9,7 +9,7 @@ export default {
       },
    },
    Mutation: {
-      timetableCreate: async (parent, { projectId, ...rest }, { models, me }, info ) => {
+      timetableCreate: async (parent, { projectId, ...rest }, { models, me }, info) => {
          console.log('createTimetable QUERY', info.fieldNodes);
          console.log('createTimetable', projectId, rest);
          const timetable = await models.Timetable.create({
@@ -22,17 +22,23 @@ export default {
       },
       timetableUpdate: async (parent, { id, ...rest }, { models, me }) => {
          try {
-            const timetable = await models.Timetable.findOneAndUpdate({ _id: id}, {
+            const timetable = await models.Timetable.findOneAndUpdate({ _id: id }, {
                ...rest
             }, { new: true });
 
             return timetable;
-         } catch(err){
+         } catch (err) {
             console.log('updateTimetable ERROR', err);
          }
       },
       timetableDelete: async (parent, { id }, { models, me }) => {
          return await models.Timetable.findByIdAndDelete(id);
       },
+   },
+   Timetable: {
+      intervals: async (parent, args, { models, me }) => {
+         const intervals = await models.Interval.find({ timetableId: parent.id });
+         return intervals;
+      }
    }
 }  

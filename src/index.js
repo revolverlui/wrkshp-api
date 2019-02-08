@@ -40,7 +40,7 @@ mongoose.connect(
 // });
 
 mongoose.connection.on('connected', () => {
-  console.log('Mongoose default connection open to ' + process.env.MONGODB_URI, process.env.AUTH_TOKEN_SECRET);
+  console.log('Mongoose default connection open to ' + process.env.MONGODB_URI);
 });
 
 // const connectDb = async () => {
@@ -63,7 +63,7 @@ const schemaWithMiddleware = applyMiddleware(
 
 const server = new ApolloServer({
   schema: schemaWithMiddleware,
-  context: async ({req}) => {
+  context: async ({ req }) => {
     const secret = process.env.AUTH_TOKEN_SECRET;
     const me = await getMe(req, secret);
 

@@ -25,7 +25,7 @@ export default {
 
          const token = await createToken(user, secret, '7d');
          console.log('createToken from MUTATION', token);
-         return {token: token};
+         return { token: token };
          //return { token: createToken(user, secret, '30m') };
       },
       userDelete: async (parent, { id }, { models }) => {
@@ -35,26 +35,26 @@ export default {
          parent,
          { email, password },
          { models, secret },
-       ) => {
+      ) => {
          const user = await models.User.findByEmail(email);
 
          console.log('login', user, user.validatePassword);
-         
+
          if (!user) {
             console.log('Enter valid credentials.');
-         //   throw new UserInputError(
-         //     'No user found with this login credentials.',
-         //   );
+            //   throw new UserInputError(
+            //     'No user found with this login credentials.',
+            //   );
          }
-   
+
          const isValid = await user.validatePassword(password);
-   
+
          if (!isValid) {
             console.log('Enter valid credentials.');
-           //throw new AuthenticationError('Invalid password.');
+            //throw new AuthenticationError('Invalid password.');
          }
-   
-         return { token: createToken(user, secret, '30m') };
-       }
+
+         return { token: createToken(user, secret, '2 days') };
+      }
    }
 }  

@@ -21,6 +21,7 @@ const timetableSchema = gql`
       startAt: Date
       endAt: Date
       title: String
+      intervals: [Interval!]
    }
 `;
 
