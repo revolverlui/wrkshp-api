@@ -8,7 +8,7 @@ const intervalSchema = gql`
 
    extend type Mutation {
       intervalCreate(projectId: ID!, timetableId: ID!, title: String): Interval!
-      intervalUpdate(id: ID!, title: String): Interval!
+      intervalUpdate(id: ID!, title: String, position: Float): Interval!
       intervalDelete(id: ID!): Interval!
    }
 
@@ -21,6 +21,7 @@ const intervalSchema = gql`
       updatedAt: Date
       duration: Int
       title: String
+      position: Float
    }
 `;
 

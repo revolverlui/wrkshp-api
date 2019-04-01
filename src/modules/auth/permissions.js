@@ -26,6 +26,10 @@ const permissions = shield({
       timetableUpdate: and(isAuthenticated, or(isOwner, isAdmin)),
       timetableDelete: and(isAuthenticated, or(isOwner, isAdmin)),
 
+      intervalCreate: isAuthenticated,
+      intervalUpdate: and(isAuthenticated, or(isOwner, isAdmin)),
+      intervalDelete: and(isAuthenticated, or(isOwner, isAdmin)),
+
    },
    User: allow,
    Project: allow,

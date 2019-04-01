@@ -22,19 +22,24 @@ let intervalSchema = new mongoose.Schema({
    },
    createdAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
    },
    updatedAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
    },
    duration: {
       type: Number,
-      default: 300, // 5 min in seconds
+      default: 300 // 5 min in seconds
    },
    title: {
       type: String,
       required: true
+   },
+   position: {
+      type: mongoose.Schema.Types.Decimal128,
+      required: true,
+      get: v => parseFloat(v.toString())
    }
 });
 
