@@ -27,6 +27,7 @@ export default {
       },
       timetableUpdate: async (parent, { id, ...rest }, { models, me }) => {
          try {
+            console.log('updateTimetable ', id, rest);
             const timetable = await models.Timetable.findOneAndUpdate(
                { _id: id },
                {

@@ -18,9 +18,9 @@ export default {
          console.log('intervalCreate', projectId, timetableId, rest);
 
          // get postion of last interval in timetable
-         const lastPostion = await models.Interval.findOne({
-            timetableId: timetableId
-         }).sort('-position');
+         // const lastPostion = await models.Interval.findOne({
+         //    timetableId: timetableId
+         // }).sort('-position');
 
          // console.log(
          //    'intervalCreate - lastPostion',
@@ -32,7 +32,7 @@ export default {
             projectId: projectId,
             timetableId: timetableId,
             userId: me.id,
-            position: parseInt(lastPostion.position.toString()) + 16384,
+            //position: parseInt(lastPostion.position.toString()) + 16384,
             ...rest
          });
 

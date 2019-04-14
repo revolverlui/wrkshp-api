@@ -11,7 +11,7 @@ const permissions = shield({
       project: and(isAuthenticated, or(isOwner, isAdmin)),
 
       timetables: and(isAuthenticated, isAdmin),
-      timetable: and(isAuthenticated, or(isOwner, isAdmin)),
+      timetable: and(isAuthenticated, or(isOwner, isAdmin))
    },
    Mutation: {
       userRegister: or(not(isAuthenticated), isAdmin),
@@ -23,13 +23,12 @@ const permissions = shield({
       projectDelete: and(isAuthenticated, or(isOwner, isAdmin)),
 
       timetableCreate: isAuthenticated,
-      timetableUpdate: and(isAuthenticated, or(isOwner, isAdmin)),
+      timetableUpdate: isAuthenticated, //and(isAuthenticated, or(isOwner, isAdmin)),
       timetableDelete: and(isAuthenticated, or(isOwner, isAdmin)),
 
       intervalCreate: isAuthenticated,
       intervalUpdate: and(isAuthenticated, or(isOwner, isAdmin)),
-      intervalDelete: and(isAuthenticated, or(isOwner, isAdmin)),
-
+      intervalDelete: and(isAuthenticated, or(isOwner, isAdmin))
    },
    User: allow,
    Project: allow,
@@ -37,4 +36,3 @@ const permissions = shield({
 });
 
 export default permissions;
-
