@@ -1,4 +1,5 @@
 import { createToken } from '../auth';
+import { ForbiddenError, AuthenticationError } from 'apollo-server-express';
 
 export default {
    Query: {
@@ -12,7 +13,7 @@ export default {
       },
       me: async (parent, args, { models, me }) => {
          return await models.User.findById(me.id);
-      },
+      }
    },
    Mutation: {
       userRegister: async (parent, { email, password }, { models, secret }) => {
@@ -31,30 +32,26 @@ export default {
       userDelete: async (parent, { id }, { models }) => {
          return await models.User.findByIdAndDelete(id);
       },
-      userLogin: async (
-         parent,
-         { email, password },
-         { models, secret },
-      ) => {
+      userLogin: async (parent, { email, password }, { models, secret }) => {
          const user = await models.User.findByEmail(email);
 
          console.log('login', user, user.validatePassword);
 
          if (!user) {
             console.log('Enter valid credentials.');
-            //   throw new UserInputError(
-            //     'No user found with this login credentials.',
-            //   );
+            throw new UserInputError(
+               'No user found with this login credentials.'
+            );
          }
 
          const isValid = await user.validatePassword(password);
 
          if (!isValid) {
             console.log('Enter valid credentials.');
-            //throw new AuthenticationError('Invalid password.');
+            throw new AuthenticationError('Authentication error');
          }
 
          return { token: createToken(user, secret, '2 days') };
       }
    }
-}  
+};
