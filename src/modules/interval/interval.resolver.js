@@ -40,6 +40,7 @@ export default {
       },
       intervalUpdate: async (parent, { id, ...rest }, { models, me }) => {
          try {
+            console.log('intervalUpdate ------- ', id, rest);
             const interval = await models.Interval.findOneAndUpdate(
                { _id: id },
                {

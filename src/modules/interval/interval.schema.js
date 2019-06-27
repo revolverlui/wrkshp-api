@@ -13,7 +13,12 @@ const intervalSchema = gql`
          title: String
          position: Float
       ): Interval!
-      intervalUpdate(id: ID!, title: String, position: Float): Interval!
+      intervalUpdate(
+         id: ID!
+         title: String
+         duration: Int
+         position: Float
+      ): Interval!
       intervalDelete(id: ID!): Interval!
    }
 
