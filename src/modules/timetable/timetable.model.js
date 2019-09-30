@@ -16,19 +16,19 @@ let timetableSchema = new mongoose.Schema({
    },
    createdAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
    },
    updatedAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
    },
    startAt: {
-      type: Date,
-      default: Date.now,
+      type: Number,
+      default: 36000 // 10:00
    },
    endAt: {
-      type: Date,
-      default: Date.now,
+      type: Number,
+      default: 61200 // 17:00
    },
    title: {
       type: String,

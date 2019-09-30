@@ -8,7 +8,13 @@ const timetableSchema = gql`
 
    extend type Mutation {
       timetableCreate(projectId: ID!, title: String): Timetable!
-      timetableUpdate(id: ID!, projectId: ID, title: String): Timetable!
+      timetableUpdate(
+         id: ID!
+         projectId: ID
+         title: String
+         startAt: Int
+         endAt: Int
+      ): Timetable!
       timetableDelete(id: ID!): Timetable!
    }
 
@@ -18,8 +24,8 @@ const timetableSchema = gql`
       projectId: ID!
       createdAt: Date
       updatedAt: Date
-      startAt: Date
-      endAt: Date
+      startAt: Int
+      endAt: Int
       title: String
       intervals: [Interval!]
    }
