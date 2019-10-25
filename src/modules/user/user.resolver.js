@@ -23,8 +23,8 @@ export default {
             email: email,
             role: 'USER'
          });
-
-         const token = await createToken(user, secret, '7d');
+         // 2do: only one call of createToken for login and register
+         const token = await createToken(user, secret, '7 days');
          console.log('createToken from MUTATION', token);
          return { token: token };
          //return { token: createToken(user, secret, '30m') };
@@ -51,7 +51,7 @@ export default {
             throw new AuthenticationError('Authentication error');
          }
 
-         return { token: createToken(user, secret, '2 days') };
+         return { token: createToken(user, secret, '7 days') };
       }
    }
 };
