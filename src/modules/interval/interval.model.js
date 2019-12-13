@@ -1,3 +1,6 @@
+// 2Do
+// change userId to createdBy?
+
 import mongoose from 'mongoose';
 
 let intervalSchema = new mongoose.Schema({
