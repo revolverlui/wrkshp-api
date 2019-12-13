@@ -1,6 +1,34 @@
 import mongoose from 'mongoose';
+import { Number, String } from 'core-js';
 
-let timetableSchema = new mongoose.Schema({
+const timetableColumnSchema = new mongoose.Schema({
+   title: {
+      type: String
+   },
+   width: {
+      type: Number,
+      required: true
+   },
+   position: {
+      type: mongoose.Schema.Types.Decimal128,
+      required: true,
+      get: v => parseFloat(v.toString())
+   },
+   type: {
+      type: String,
+      enum: [
+         'duration',
+         'time',
+         'title',
+         'text',
+         'user-single',
+         'user-multiple',
+         'method'
+      ]
+   }
+});
+
+const timetableSchema = new mongoose.Schema({
    // createdBy
    userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -33,7 +61,8 @@ let timetableSchema = new mongoose.Schema({
    title: {
       type: String,
       required: true
-   }
+   },
+   columns: [timetableColumnSchema]
 });
 
 module.exports = mongoose.model('Timetable', timetableSchema);

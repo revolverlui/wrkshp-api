@@ -1,3 +1,6 @@
+// 2Do
+// check custom scalar types in graphql https://kamranicus.com/posts/2018-07-02-handling-multiple-scalar-types-in-graphql
+
 import { gql } from 'apollo-server-express';
 
 const intervalSchema = gql`
@@ -22,6 +25,15 @@ const intervalSchema = gql`
       intervalDelete(id: ID!): Interval!
    }
 
+   type IntervalField {
+      id: ID
+      columnId: ID
+      duration: Int
+      time: Int
+      title: String
+      text: String
+   }
+
    type Interval {
       id: ID
       userId: ID
@@ -32,6 +44,7 @@ const intervalSchema = gql`
       duration: Int
       title: String
       position: Float
+      fields: [IntervalField!]
    }
 `;
 

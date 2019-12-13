@@ -17,9 +17,17 @@ export default {
       ) => {
          console.log('createTimetable QUERY', info.fieldNodes);
          console.log('createTimetable', projectId, rest);
+
+         const columnsDefault = [
+            { title: 'Duration', type: 'duration', width: 100, position: 1000 },
+            { title: 'Title', type: 'title', width: 200, position: 2000 },
+            { title: 'Description', type: 'text', width: 300, position: 3000 }
+         ];
+
          const timetable = await models.Timetable.create({
             projectId: projectId,
             userId: me.id,
+            columns: columnsDefault,
             ...rest
          });
 
@@ -50,6 +58,10 @@ export default {
          const intervals = await models.Interval.find({
             timetableId: parent.id
          }).sort('position');
+
+         // 2Do
+         // get columns of timetable
+         // enhance intervals with columns
          return intervals;
       }
    }

@@ -18,6 +18,14 @@ const timetableSchema = gql`
       timetableDelete(id: ID!): Timetable!
    }
 
+   type TimetableColumns {
+      id: ID!
+      title: String
+      width: Int
+      position: Float
+      type: String
+   }
+
    type Timetable {
       id: ID
       userId: ID
@@ -27,6 +35,7 @@ const timetableSchema = gql`
       startAt: Int
       endAt: Int
       title: String
+      columns: [TimetableColumns!]
       intervals: [Interval!]
    }
 `;

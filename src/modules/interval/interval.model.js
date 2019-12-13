@@ -3,6 +3,15 @@
 
 import mongoose from 'mongoose';
 
+let intervalFieldSchema = new mongoose.Schema({
+   columnId: mongoose.Schema.Types.ObjectId,
+   duration: { type: Number },
+   time: { type: Number },
+   title: { type: String },
+   text: { type: String },
+   user: { type: mongoose.Schema.Types.ObjectId }
+});
+
 let intervalSchema = new mongoose.Schema({
    // createdBy
    userId: {
@@ -43,7 +52,8 @@ let intervalSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.Decimal128,
       required: true,
       get: v => parseFloat(v.toString())
-   }
+   },
+   fields: [intervalFieldSchema]
 });
 
 module.exports = mongoose.model('Interval', intervalSchema);
