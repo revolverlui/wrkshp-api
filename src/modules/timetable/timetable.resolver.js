@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 export default {
    Query: {
       timetables: async (parent, args, { models }, info) => {
@@ -18,11 +20,37 @@ export default {
          console.log('createTimetable QUERY', info.fieldNodes);
          console.log('createTimetable', projectId, rest);
 
-         const columnsDefault = [
-            { title: 'Duration', type: 'duration', width: 100, position: 1000 },
-            { title: 'Title', type: 'title', width: 200, position: 2000 },
-            { title: 'Description', type: 'text', width: 300, position: 3000 }
-         ];
+         // const columnsDefault = [
+         //    {
+         //       title: 'Duration',
+         //       type: 'duration',
+         //       width: 100,
+         //       position: 1000,
+         //       isDefault: true
+         //    },
+         //    {
+         //       title: 'Title',
+         //       type: 'title',
+         //       width: 200,
+         //       position: 2000,
+         //       isDefault: true
+         //    }
+         //    //{ title: 'Description', type: 'text', width: 300, position: 3000 }
+         // ];
+         console.log(
+            'timetableResolver',
+            models.Settings.timetables.columns.defaults
+         );
+         const settingsTimetableColumns = await models.Settings.timetables
+            .columns;
+
+         const columnsDefault = settingsTimetableColumns.defaults.map(
+            column => {
+               return { ...column };
+            }
+         );
+
+         console.log('columnsDefault', columnsDefault);
 
          const timetable = await models.Timetable.create({
             projectId: projectId,
@@ -55,14 +83,37 @@ export default {
    },
    Timetable: {
       intervals: async (parent, args, { models, me }) => {
+         const timetable = await models.Timetable.findById(parent.id);
+
          const intervals = await models.Interval.find({
             timetableId: parent.id
          }).sort('position');
 
+         const enhancedIntervals = intervals.map(interval => {
+            const enhancedFields = timetable.columns.map(column => {
+               const field = interval.fields.find(
+                  field => field.columnId === column.id
+               );
+
+               const enhancedField = {
+                  columnId: column.id,
+                  width: column.width,
+                  type: column.type,
+                  ...field
+               };
+
+               return enhancedField;
+            });
+
+            interval.fields = enhancedFields;
+            return interval;
+         });
+
          // 2Do
          // get columns of timetable
          // enhance intervals with columns
-         return intervals;
+         //return intervals;
+         return enhancedIntervals;
       }
    }
 };

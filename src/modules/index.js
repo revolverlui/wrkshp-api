@@ -15,54 +15,48 @@ import User from './user/user.model';
 import Project from './project/project.model';
 import Timetable from './timetable/timetable.model';
 import Interval from './interval/interval.model';
-
+import Settings from './settings/settings.model';
 
 const linkSchema = gql`
-  scalar Date
+   scalar Date
 
-  type Query {
-    _: Boolean
-  }
-  type Mutation {
-    _: Boolean
-  }
-  type Subscription {
-    _: Boolean
-  }
+   type Query {
+      _: Boolean
+   }
+   type Mutation {
+      _: Boolean
+   }
+   type Subscription {
+      _: Boolean
+   }
 `;
 
 const schema = [
-  linkSchema,
-  userSchema,
-  projectSchema,
-  timetableSchema,
-  intervalSchema
+   linkSchema,
+   userSchema,
+   projectSchema,
+   timetableSchema,
+   intervalSchema
 ];
 
-
 const customScalarResolver = {
-  Date: GraphQLDateTime,
+   Date: GraphQLDateTime
 };
 
 const resolvers = [
-  customScalarResolver,
-  userResolvers,
-  projectResolvers,
-  timetableResolver,
-  intervalResolver
+   customScalarResolver,
+   userResolvers,
+   projectResolvers,
+   timetableResolver,
+   intervalResolver
 ];
 
-
 const models = {
-  User,
-  Project,
-  Timetable,
-  Interval
+   User,
+   Project,
+   Timetable,
+   Interval,
+   Settings
 };
 
-
-export {
-  schema,
-  resolvers,
-  models
-}
+export { schema, resolvers, models };

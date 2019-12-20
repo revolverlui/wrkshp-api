@@ -28,8 +28,11 @@ import { schema, resolvers, models } from './modules';
 //import resolvers from './modules/resolvers';
 //import models from './modules/models';
 
+// https://stackoverflow.com/questions/52572852/deprecationwarning-collection-findandmodify-is-deprecated-use-findoneandupdate
 mongoose.connect('mongodb://localhost:27017/wrkshp-dev', {
-   useNewUrlParser: true
+   useNewUrlParser: true,
+   useUnifiedTopology: true,
+   useFindAndModify: false
 });
 
 // async connect(connectionString: string): Promise<void> {

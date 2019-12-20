@@ -1,3 +1,6 @@
+// 2do
+// use shortids - https://www.npmjs.com/package/shortid
+// set default value based on type and get value from settings model
 import mongoose from 'mongoose';
 import { Number, String } from 'core-js';
 
@@ -25,6 +28,15 @@ const timetableColumnSchema = new mongoose.Schema({
          'user-multiple',
          'method'
       ]
+   },
+   isDefault: {
+      type: Boolean
+   },
+   defaultField: {
+      duration: { type: Number },
+      time: { type: Number },
+      title: { type: String },
+      text: { type: String }
    }
 });
 

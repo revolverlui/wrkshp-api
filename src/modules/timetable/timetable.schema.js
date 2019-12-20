@@ -1,3 +1,7 @@
+// 2Do
+// import fields from interval fields as fragments to define
+// schema of the columns default values (e.g. duration, time, ...)
+
 import { gql } from 'apollo-server-express';
 
 const timetableSchema = gql`
@@ -24,6 +28,7 @@ const timetableSchema = gql`
       width: Int
       position: Float
       type: String
+      isDefault: Boolean
    }
 
    type Timetable {

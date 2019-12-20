@@ -23,6 +23,14 @@ const intervalSchema = gql`
          position: Float
       ): Interval!
       intervalDelete(id: ID!): Interval!
+      intervalFieldUpdate(
+         intervalId: ID!
+         intervalFieldId: ID!
+         duration: Int
+         time: Int
+         title: String
+         text: String
+      ): IntervalField!
    }
 
    type IntervalField {

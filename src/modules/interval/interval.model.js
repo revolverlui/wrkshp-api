@@ -3,7 +3,7 @@
 
 import mongoose from 'mongoose';
 
-let intervalFieldSchema = new mongoose.Schema({
+const intervalFieldSchema = new mongoose.Schema({
    columnId: mongoose.Schema.Types.ObjectId,
    duration: { type: Number },
    time: { type: Number },
@@ -12,7 +12,7 @@ let intervalFieldSchema = new mongoose.Schema({
    user: { type: mongoose.Schema.Types.ObjectId }
 });
 
-let intervalSchema = new mongoose.Schema({
+const intervalSchema = new mongoose.Schema({
    // createdBy
    userId: {
       type: mongoose.Schema.Types.ObjectId,
