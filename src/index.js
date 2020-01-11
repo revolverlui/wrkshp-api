@@ -68,6 +68,8 @@ const executableSchema = makeExecutableSchema({
 const schemaWithMiddleware = applyMiddleware(executableSchema, permissions);
 
 const server = new ApolloServer({
+   introspection: true,
+   playground: true,
    schema: schemaWithMiddleware,
    context: async ({ req }) => {
       const secret = process.env.AUTH_TOKEN_SECRET;
