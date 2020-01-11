@@ -12,6 +12,7 @@ import mongoose from 'mongoose';
 
 import { getMe } from './modules/auth';
 import permissions from './modules/auth/permissions';
+import { schema, resolvers, models } from './modules';
 
 const app = express();
 
@@ -23,12 +24,13 @@ app.use(morgan('dev'));
 //    setTimeout(next, 2000);
 // });
 
-import { schema, resolvers, models } from './modules';
 //import resolvers from './modules/resolvers';
 //import models from './modules/models';
 
+const connectDB = async () => {};
+
 // https://stackoverflow.com/questions/52572852/deprecationwarning-collection-findandmodify-is-deprecated-use-findoneandupdate
-mongoose.connect('mongodb://localhost:27017/wrkshp-dev', {
+mongoose.connect(process.env.MONGODB_URI, {
    useNewUrlParser: true,
    useUnifiedTopology: true,
    useFindAndModify: false
