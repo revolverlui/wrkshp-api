@@ -49,9 +49,9 @@ mongoose.connection.on('connected', () => {
    );
 });
 
-mongoose.connection.on('error', () => {
-   throw new Error(`unable to connect to database: ${process.env.MONGODB_URI}`);
-});
+// mongoose.connection.on('error', () => {
+//    throw new Error(`unable to connect to database: ${process.env.MONGODB_URI}`);
+// });
 
 // const connectDb = async () => {
 //   const db = await mongoose.connect('mongodb://localhost:27017/wrkshp-dev');
