@@ -1,6 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
+// load environment variables with dotenv from .env in dev
+// https://stackoverflow.com/questions/10560241/how-to-use-nodemon-with-env-files
 import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';

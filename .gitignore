@@ -7,9 +7,6 @@
 # production
 /dist
 
-# env
-/env
-
 # local mongodb
 /data
 
