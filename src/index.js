@@ -42,7 +42,7 @@ mongoose.connect('mongodb://localhost:27017/wrkshp-dev', {
 // mongoose.connection.on('error', () => {
 //   throw new Error(`unable to connect to database: ${process.env.MONGODB_URI}`);
 // });
-
+console.log('env', process.env);
 mongoose.connection.on('connected', () => {
    console.log(
       'Mongoose default connection open to ' + process.env.MONGODB_URI
