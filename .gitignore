@@ -8,7 +8,7 @@
 /dist
 
 # local mongodb
-/data
+/mongodb-volume
 
 # misc
 .cache

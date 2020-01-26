@@ -20,9 +20,18 @@ const timetableSchema = gql`
          endAt: Int
       ): Timetable!
       timetableDelete(id: ID!): Timetable!
+      timetableColumnUpdate(
+         timetableId: ID!
+         timetableColumnId: ID!
+         title: String
+         width: Int
+         position: Float
+         type: String
+         isDefault: Boolean
+      ): TimetableColumn!
    }
 
-   type TimetableColumns {
+   type TimetableColumn {
       id: ID!
       title: String
       width: Int
@@ -40,7 +49,7 @@ const timetableSchema = gql`
       startAt: Int
       endAt: Int
       title: String
-      columns: [TimetableColumns!]
+      columns: [TimetableColumn!]
       intervals: [Interval!]
    }
 `;

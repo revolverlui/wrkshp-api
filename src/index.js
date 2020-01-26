@@ -27,7 +27,21 @@ app.use(morgan('dev'));
 //import resolvers from './modules/resolvers';
 //import models from './modules/models';
 
+// https://stackoverflow.com/questions/56465695/unhandled-promise-rejection-this-error-originated-either-by-throwing-inside-of
 const connectDB = async () => {};
+
+// https://dev.to/cpclark360/how-to-host-a-restful-node-js-server-with-mongodb-atlas-database-on-heroku-1opl
+// https://stackoverflow.com/questions/54890608/how-to-use-async-await-with-mongoose
+// const connectDb = async () => {
+//    try {
+//        await mongoose.connect(dbConfig.url, dbConfigOptions)
+
+//        console.info(`Connected to database on Worker process: ${process.pid}`)
+//    } catch (error) {
+//        console.error(`Connection error: ${error.stack} on Worker process: ${process.pid}`)
+//        process.exit(1)
+//    }
+// }
 
 // https://stackoverflow.com/questions/52572852/deprecationwarning-collection-findandmodify-is-deprecated-use-findoneandupdate
 mongoose.connect(process.env.MONGODB_URI, {

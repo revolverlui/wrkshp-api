@@ -33,11 +33,14 @@ export default {
             if (column.isDefault) {
                const field = {
                   columnId: column.id,
+                  type: column.type,
                   [column.type]: column.defaultField[column.type]
                };
                return field;
             }
          });
+
+         console.log('[intervalCreate] - fields', fieldsDefault);
 
          const interval = await models.Interval.create({
             projectId: projectId,

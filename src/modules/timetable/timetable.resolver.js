@@ -7,7 +7,9 @@ export default {
          return await models.Timetable.find({});
       },
       timetable: async (parent, { id }, { models }) => {
-         return await models.Timetable.findById(id);
+         const timetable = await models.Timetable.findById(id);
+         console.log('timetable', timetable);
+         return timetable;
       }
    },
    Mutation: {
@@ -79,41 +81,74 @@ export default {
       },
       timetableDelete: async (parent, { id }, { models, me }) => {
          return await models.Timetable.findByIdAndDelete(id);
+      },
+      timetableColumnUpdate: async (
+         parent,
+         { timetableId, timetableColumnId, ...rest },
+         { models, me }
+      ) => {
+         try {
+            console.log(
+               'updateTimetable ',
+               timetableId,
+               timetableColumnId,
+               rest
+            );
+
+            // https://stackoverflow.com/questions/15874750/partial-update-of-a-subdocument-with-nodejs-mongoose
+            var set = {};
+            for (let field in rest) {
+               set['columns.$.' + field] = rest[field];
+            }
+
+            const timetableColumn = await models.Timetable.findOneAndUpdate(
+               { _id: timetableId, 'columns._id': timetableColumnId },
+               {
+                  $set: set
+               },
+               { new: true }
+            );
+            console.log('timetableColumn', timetableColumn, set);
+            return timetableColumn;
+         } catch (err) {
+            console.log('timetableColumn ERROR', err);
+         }
       }
    },
    Timetable: {
       intervals: async (parent, args, { models, me }) => {
-         const timetable = await models.Timetable.findById(parent.id);
-
          const intervals = await models.Interval.find({
             timetableId: parent.id
          }).sort('position');
 
-         const enhancedIntervals = intervals.map(interval => {
-            const enhancedFields = timetable.columns.map(column => {
-               const field = interval.fields.find(
-                  field => field.columnId === column.id
-               );
+         return intervals;
 
-               const enhancedField = {
-                  columnId: column.id,
-                  width: column.width,
-                  type: column.type,
-                  ...field
-               };
+         // const timetable = await models.Timetable.findById(parent.id);
+         // const enhancedIntervals = intervals.map(interval => {
+         //    const enhancedFields = timetable.columns.map(column => {
+         //       const field = interval.fields.find(
+         //          field => field.columnId === column.id
+         //       );
 
-               return enhancedField;
-            });
+         //       const enhancedField = {
+         //          columnId: column.id,
+         //          width: column.width,
+         //          type: column.type,
+         //          ...field
+         //       };
 
-            interval.fields = enhancedFields;
-            return interval;
-         });
+         //       return enhancedField;
+         //    });
 
-         // 2Do
-         // get columns of timetable
-         // enhance intervals with columns
-         //return intervals;
-         return enhancedIntervals;
+         //    interval.fields = enhancedFields;
+         //    return interval;
+         // });
+
+         // // 2Do
+         // // get columns of timetable
+         // // enhance intervals with columns
+         // //return intervals;
+         // return enhancedIntervals;
       }
    }
 };

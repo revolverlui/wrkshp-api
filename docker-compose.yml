@@ -1,22 +1,24 @@
-version: "3"
+# https://medium.com/faun/managing-mongodb-on-docker-with-docker-compose-26bf8a0bbae3
+version: '3'
 services:
-  # app:
-  #   image: node:alpine
-  #   volumes:
-  #     - ./:/app
-  #   working_dir: /app
-  #   depends_on:
-  #     - mongo
-  #   environment:
-  #     NODE_ENV: development
-  #   ports:
-  #     - 3000:3000
-  #   command: npm run dev
-  mongo:
-    image: mongo
-    ports:
-      - 27017:27017
-      # expose:
-      #   - 27017
-    volumes:
-      - ./data/db:/data/db
+   # app:
+   #   image: node:alpine
+   #   volumes:
+   #     - ./:/app
+   #   working_dir: /app
+   #   depends_on:
+   #     - mongo
+   #   environment:
+   #     NODE_ENV: development
+   #   ports:
+   #     - 3000:3000
+   #   command: npm run dev
+   mongo:
+      image: mongo
+      container_name: 'wrkshp-api-mongodb-dev'
+      ports:
+         - 27017:27017
+         # expose:
+         #   - 27017
+      volumes:
+         - ./mongodb-volume/db:/data/db

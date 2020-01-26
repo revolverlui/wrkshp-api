@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 const intervalFieldSchema = new mongoose.Schema({
    columnId: mongoose.Schema.Types.ObjectId,
    duration: { type: Number },
+   type: { type: String, enum: ['title', 'text', 'duration'] },
    time: { type: Number },
    title: { type: String },
    text: { type: String },
