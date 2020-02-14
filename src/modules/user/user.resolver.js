@@ -1,4 +1,4 @@
-import { createToken } from '../auth';
+import { createAccessToken, sendRefreshToken } from '../auth';
 import { ForbiddenError, AuthenticationError } from 'apollo-server-express';
 
 export default {
@@ -32,7 +32,7 @@ export default {
       userDelete: async (parent, { id }, { models }) => {
          return await models.User.findByIdAndDelete(id);
       },
-      userLogin: async (parent, { email, password }, { models, secret }) => {
+      userLogin: async (parent, { email, password }, { models, res }) => {
          const user = await models.User.findByEmail(email);
 
          console.log('login', user, user.validatePassword);
@@ -51,7 +51,18 @@ export default {
             throw new AuthenticationError('Authentication error');
          }
 
-         return { token: createToken(user, secret, '7 days') };
+         //res.cookie('refresh-token', refreshToken);
+         // res.cookie('token', refreshToken, {
+         //    maxAge: 1000 * 60 * 60 * 24 * 365,
+         //    //domain: 'http://localhost:8000/',
+         //    //sameSite: true,
+         //    //path: '/admin',
+         //    httpOnly: true
+         // });
+
+         await sendRefreshToken(res, user);
+
+         return { token: createAccessToken(user) };
       }
    }
 };

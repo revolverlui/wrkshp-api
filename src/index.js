@@ -5,19 +5,103 @@ import { ApolloServer, gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { applyMiddleware } from 'graphql-middleware';
 
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 
 import mongoose from 'mongoose';
 
-import { getMe } from './modules/auth';
+import {
+   PORT,
+   MONGODB_URI,
+   WEB_APP_URL,
+   SECRET_REFRESH_TOKEN_LABEL
+} from './config';
+import {
+   getMe,
+   verifyRefreshToken,
+   sendRefreshToken,
+   createAccessToken
+} from './modules/auth';
 import permissions from './modules/auth/permissions';
 import { schema, resolvers, models } from './modules';
 
 const app = express();
 
-app.use(cors());
+// https://www.npmjs.com/package/cors#configuring-cors-w-dynamic-origin
+var corsOptions = {
+   origin: (origin, callback) => {
+      const whitelist = [WEB_APP_URL, 'https://site2.com'];
+
+      if (whitelist.indexOf(origin) !== -1) {
+         callback(null, true);
+      } else {
+         callback(new Error('Not allowed by CORS'));
+      }
+   },
+   credentials: true
+};
+
+app.use(cors(corsOptions));
+//app.use(cors());
 app.use(morgan('dev'));
+app.use(cookieParser());
+
+app.use(async (req, res, next) => {
+   console.log('req.cookies', req.cookies);
+   //res.cookie('refresh-token', 'jhjhvjhvhv');
+   next();
+});
+
+app.get('/', (_req, res) => res.send('hello'));
+
+// get access token
+app.post('/refresh-token', async (req, res) => {
+   console.log('/refresh-token');
+   const token = req.cookies[SECRET_REFRESH_TOKEN_LABEL];
+
+   console.log('/refresh-token - token', token);
+   if (!token) {
+      return res.send({ ok: false, accessToken: '' });
+   }
+
+   let payload = null;
+   try {
+      payload = verifyRefreshToken(token);
+      console.log('/refresh-token - payload', payload);
+   } catch (err) {
+      console.log(err);
+      return res.send({ ok: false, accessToken: '' });
+   }
+
+   // token is valid and
+   // we can send back an access token
+
+   const user = await models.User.findById(payload.id);
+   console.log('/refresh-token - user', user);
+   if (!user) {
+      return res.send({ ok: false, accessToken: '' });
+   }
+
+   console.log(
+      '/refresh-token - user.tokenVersion',
+      user.tokenVersion,
+      payload.tokenVersion
+   );
+   if (user.tokenVersion !== payload.tokenVersion) {
+      console.log(
+         '/refresh-token - user.tokenVersion',
+         user.tokenVersion,
+         payload.tokenVersion
+      );
+      return res.send({ ok: false, accessToken: '' });
+   }
+
+   await sendRefreshToken(res, user);
+   console.log('/refresh-token - sendRefreshToken');
+
+   return res.send({ ok: true, accessToken: createAccessToken(user) });
+});
 
 // delay for debug - opimisticResponse on client side
 // app.use(function(req, res, next) {
@@ -44,7 +128,7 @@ const connectDB = async () => {};
 // }
 
 // https://stackoverflow.com/questions/52572852/deprecationwarning-collection-findandmodify-is-deprecated-use-findoneandupdate
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect(MONGODB_URI, {
    useNewUrlParser: true,
    useUnifiedTopology: true,
    useFindAndModify: false
@@ -58,11 +142,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 // mongoose.connection.on('error', () => {
 //   throw new Error(`unable to connect to database: ${process.env.MONGODB_URI}`);
 // });
-console.log('env', process.env);
+//console.log('env', process.env);
 mongoose.connection.on('connected', () => {
-   console.log(
-      'Mongoose default connection open to ' + process.env.MONGODB_URI
-   );
+   console.log('Mongoose default connection open to ' + MONGODB_URI);
 });
 
 // mongoose.connection.on('error', () => {
@@ -85,7 +167,7 @@ const server = new ApolloServer({
    introspection: true,
    playground: true,
    schema: schemaWithMiddleware,
-   context: async ({ req }) => {
+   context: async ({ req, res }) => {
       const secret = process.env.AUTH_TOKEN_SECRET;
       const me = await getMe(req, secret);
 
@@ -93,6 +175,7 @@ const server = new ApolloServer({
 
       return {
          req,
+         res,
          me,
          secret: secret,
          models
@@ -100,8 +183,32 @@ const server = new ApolloServer({
    }
 });
 
-server.applyMiddleware({ app, path: '/graphql' });
-
-app.listen({ port: process.env.PORT }, () => {
-   console.log(`Apollo Server on http://localhost:${process.env.PORT}/graphql`);
+server.applyMiddleware({
+   app,
+   path: '/graphql',
+   cors: false
 });
+
+app.listen({ port: PORT }, () => {
+   console.log(`Apollo Server on http://localhost:${PORT}/graphql`);
+});
+
+// cors setting
+// https://github.com/apollographql/apollo-server/issues/1142
+
+// server.applyMiddleware({
+//    app,
+//    path: '/graphql',
+//    cors: {
+//       credentials: true,
+//       origin: (origin, callback) => {
+//          const whitelist = ['http://localhost:8080', 'https://site2.com'];
+
+//          if (whitelist.indexOf(origin) !== -1) {
+//             callback(null, true);
+//          } else {
+//             callback(new Error('Not allowed by CORS'));
+//          }
+//       }
+//    }
+// });

@@ -19,21 +19,23 @@ let userSchema = new mongoose.Schema({
    role: {
       type: String,
       required: true
+   },
+   tokenVersion: {
+      type: Number,
+      default: 0
    }
 });
 
-
-userSchema.pre('save', async function(next){
+userSchema.pre('save', async function(next) {
    this.password = await this.generateHashPassword();
    next();
 });
-
 
 // Statics (methods defined on the model level)
 // https://gist.github.com/niksumeiko/f551eeb57a509bc27f9372978055c2e6
 // https://stackoverflow.com/questions/51038621/mongoose-schema-statics-vs-methods
 userSchema.statics.findByEmail = async function(email) {
-   let user = await this.findOne({ email: email});
+   let user = await this.findOne({ email: email });
    return user;
 };
 
@@ -41,12 +43,20 @@ userSchema.statics.findByEmail = async function(email) {
 // fido.findSimilarTypes(function(err, dogs){
 //    // dogs => [ {name:'fido',type:'dog} , {name:'sheeba',type:'dog'} ]
 // });
-userSchema.methods.generateHashPassword = async function(){
+userSchema.methods.generateHashPassword = async function() {
    return await bcrypt.hash(this.password, 10);
-}
+};
 
 userSchema.methods.validatePassword = async function(password) {
    return await bcrypt.compare(password, this.password);
+};
+
+userSchema.methods.incrementTokenVersion = async function() {
+   return await this.model('User').findOneAndUpdate(
+      { _id: this.id },
+      { $inc: { tokenVersion: 1 } },
+      { new: true }
+   );
 };
 
 module.exports = mongoose.model('User', userSchema);

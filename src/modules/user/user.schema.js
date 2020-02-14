@@ -23,6 +23,7 @@ const userSchema = gql`
       email: String!
       password: String!
       role: String!
+      tokenVersion: Int
    }
 `;
 
