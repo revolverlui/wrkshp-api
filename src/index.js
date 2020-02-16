@@ -31,8 +31,8 @@ const app = express();
 // https://www.npmjs.com/package/cors#configuring-cors-w-dynamic-origin
 var corsOptions = {
    origin: (origin, callback) => {
-      const whitelist = [WEB_APP_URL, 'https://site2.com'];
-
+      const whitelist = [WEB_APP_URL];
+      console.log('origin', origin);
       if (whitelist.indexOf(origin) !== -1) {
          callback(null, true);
       } else {
@@ -43,7 +43,7 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-//app.use(cors());
+//app.use(cors()); // for grapql playground
 app.use(morgan('dev'));
 app.use(cookieParser());
 

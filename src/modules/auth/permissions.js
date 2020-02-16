@@ -18,6 +18,7 @@ const permissions = shield(
       Mutation: {
          userRegister: or(not(isAuthenticated), isAdmin),
          userLogin: not(isAuthenticated),
+         userLogout: and(isAuthenticated, or(isOwner, isAdmin)),
          userDelete: and(isAuthenticated, or(isOwner, isAdmin)),
 
          projectCreate: isAuthenticated,

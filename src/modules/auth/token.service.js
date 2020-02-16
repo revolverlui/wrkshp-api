@@ -43,7 +43,9 @@ const verifyRefreshToken = token => {
       return jwt.verify(token, SECRET_REFRESH_TOKEN);
    } catch (e) {
       console.log('Your session expired. Sign in again.');
-      throw new AuthenticationError('Your session expired. Sign in again.');
+      // throw new AuthenticationError(
+      //    'Your session expired. Sign in again.',
+      // );
    }
 };
 
@@ -62,9 +64,9 @@ const getMe = async (req, secret) => {
             return jwt.verify(token, SECRET_ACCESS_TOKEN);
          } catch (e) {
             console.log('Your session expired. Sign in again.');
-            throw new AuthenticationError(
-               'Your session expired. Sign in again.'
-            );
+            // throw new AuthenticationError(
+            //    'Your session expired. Sign in again.',
+            // );
          }
       }
    }

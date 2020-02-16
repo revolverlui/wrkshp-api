@@ -63,6 +63,16 @@ export default {
          await sendRefreshToken(res, user);
 
          return { token: createAccessToken(user) };
+      },
+      userLogout: async (parent, {}, { models, me }) => {
+         console.log('userLogout');
+         const user = await models.User.findById(me.id);
+         const userWithNextTokenVersion = await user.incrementTokenVersion();
+         if (user.tokenVersion < userWithNextTokenVersion.tokenVersion) {
+            return { ok: true };
+         } else {
+            return { ok: false };
+         }
       }
    }
 };
